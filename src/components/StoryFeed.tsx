@@ -58,6 +58,7 @@ export default function StoryFeed({ refreshTrigger }: { refreshTrigger: number }
                 (s) => !translatedStories[s.id] && s.content
             )
 
+
             if (missingStories.length === 0) return
 
             // Optimize: Promise.all for parallel fetching

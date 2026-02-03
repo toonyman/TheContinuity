@@ -29,27 +29,26 @@ export async function translateText(
         return text;
     }
 
-    // Using MyMemory API for true free/anonymous usage
-    // API uses 'auto' for autodetection
-    const apiUrl = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=${sourceLang}|${targetLang}`
+    // Using Google GTX API for better reliability and limits
+    const apiUrl = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=${sourceLang}&tl=${targetLang}&dt=t&q=${encodeURIComponent(text)}`
 
     try {
         const res = await fetch(apiUrl)
 
         if (!res.ok) {
-            console.warn('Translation failed, returning original text')
+            console.warn(`Translation failed: ${res.status} ${res.statusText}`)
             return text;
         }
 
-        const data: TranslationResponse = await res.json()
+        const data = await res.json()
 
-        // Check for specific error message about invalid pair
-        if (data.responseStatus !== 200) {
-            console.warn('Translation API returned error:', data.responseDetails)
-            return text
+        // Google GTX returns complex array structure
+        // data[0] is array of sentences: [[translated, source, ...], [translated, source, ...]]
+        if (data && data[0]) {
+            return data[0].map((item: any) => item[0]).join('')
         }
 
-        return data.responseData.translatedText
+        return text
     } catch (error) {
         console.error('Translation error:', error)
         return text

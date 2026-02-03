@@ -1,24 +1,57 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import styles from './page.module.css'
 import StoryFeed from '@/components/StoryFeed'
 import StoryInput from '@/components/StoryInput'
+import GuideModal from '@/components/GuideModal'
+import AboutModal from '@/components/AboutModal'
 import { LANGUAGES } from '@/lib/translate'
 
 export default function Home() {
     const [refreshTrigger, setRefreshTrigger] = useState(0)
     const [targetLang, setTargetLang] = useState('en')
+    const [showGuide, setShowGuide] = useState(false)
+    const [showAbout, setShowAbout] = useState(false)
+
+    useEffect(() => {
+        const visited = localStorage.getItem('hasVisited')
+        if (!visited) {
+            setShowGuide(true)
+            localStorage.setItem('hasVisited', 'true')
+        }
+    }, [])
 
     return (
         <main className={styles.main}>
             <header className={styles.header}>
-                <h1 className={styles.title}>The Continuity</h1>
-                <p className={styles.subtitle}>A Global Collaborative Novel</p>
+                <div className={styles.headerLeft}></div> {/* Spacer for centering */}
+                <div className={styles.headerTitle}>
+                    <h1 className={styles.title}>The Continuity</h1>
+                    <p className={styles.subtitle}>A Global Collaborative Novel</p>
+                </div>
+                <div className={styles.headerControls}>
+                    <button
+                        onClick={() => setShowGuide(true)}
+                        className={styles.iconBtn}
+                        aria-label="How to use"
+                    >
+                        ?
+                    </button>
+                    <button
+                        onClick={() => setShowAbout(true)}
+                        className={styles.iconBtn}
+                        aria-label="About"
+                    >
+                        i
+                    </button>
+                </div>
             </header>
 
+            <GuideModal isOpen={showGuide} onClose={() => setShowGuide(false)} />
+            <AboutModal isOpen={showAbout} onClose={() => setShowAbout(false)} />
+
             <div className={styles.contentWrapper}>
-                {/* Left: Feed */}
                 {/* Left: Feed */}
                 <section className={styles.feedSection}>
                     <div className={styles.feedHeader}>

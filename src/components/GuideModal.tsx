@@ -1,34 +1,39 @@
 import Modal from './Modal'
+import { TRANSLATIONS } from '@/lib/translations'
 
 interface GuideModalProps {
     isOpen: boolean;
     onClose: () => void;
+    lang: string;
 }
 
-export default function GuideModal({ isOpen, onClose }: GuideModalProps) {
+export default function GuideModal({ isOpen, onClose, lang }: GuideModalProps) {
+    const t = TRANSLATIONS[lang] || TRANSLATIONS['en']
+    const g = t.guide
+
     return (
-        <Modal isOpen={isOpen} onClose={onClose} title="How to Participate">
+        <Modal isOpen={isOpen} onClose={onClose} title={g.title}>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                <p>Welcome to <strong>The Continuity</strong>, a global collaborative novel written by people from all over the world.</p>
+                <p dangerouslySetInnerHTML={{ __html: g.intro }} />
 
                 <div style={{ background: 'rgba(255,255,255,0.05)', padding: '1rem', borderRadius: '8px' }}>
-                    <h3 style={{ marginTop: 0, color: '#f1c40f' }}>1. Read</h3>
-                    <p style={{ margin: 0 }}>Scroll through the feed to read the story so far. It flows continuously.</p>
+                    <h3 style={{ marginTop: 0, color: '#f1c40f' }}>{g.step1Title}</h3>
+                    <p style={{ margin: 0 }}>{g.step1Desc}</p>
                 </div>
 
                 <div style={{ background: 'rgba(255,255,255,0.05)', padding: '1rem', borderRadius: '8px' }}>
-                    <h3 style={{ marginTop: 0, color: '#f1c40f' }}>2. Translate</h3>
-                    <p style={{ margin: 0 }}>Use the language selector at the top-left of the feed to read in your preferred language.</p>
+                    <h3 style={{ marginTop: 0, color: '#f1c40f' }}>{g.step2Title}</h3>
+                    <p style={{ margin: 0 }}>{g.step2Desc}</p>
                 </div>
 
                 <div style={{ background: 'rgba(255,255,255,0.05)', padding: '1rem', borderRadius: '8px' }}>
-                    <h3 style={{ marginTop: 0, color: '#f1c40f' }}>3. Write</h3>
-                    <p style={{ margin: 0 }}>Add the next sentence to the story. Keep it under 100 characters. You can write in your native language!</p>
+                    <h3 style={{ marginTop: 0, color: '#f1c40f' }}>{g.step3Title}</h3>
+                    <p style={{ margin: 0 }}>{g.step3Desc}</p>
                 </div>
 
                 <div style={{ background: 'rgba(255,255,255,0.05)', padding: '1rem', borderRadius: '8px' }}>
-                    <h3 style={{ marginTop: 0, color: '#f1c40f' }}>4. Cooldown</h3>
-                    <p style={{ margin: 0 }}>To give everyone a chance, you must wait 5 minutes between contributions.</p>
+                    <h3 style={{ marginTop: 0, color: '#f1c40f' }}>{g.step4Title}</h3>
+                    <p style={{ margin: 0 }}>{g.step4Desc}</p>
                 </div>
 
                 <button
@@ -36,7 +41,7 @@ export default function GuideModal({ isOpen, onClose }: GuideModalProps) {
                     className="btn-primary"
                     style={{ marginTop: '1rem' }}
                 >
-                    Start Writing
+                    {g.button}
                 </button>
             </div>
         </Modal>

@@ -7,6 +7,7 @@ import StoryInput from '@/components/StoryInput'
 import GuideModal from '@/components/GuideModal'
 import AboutModal from '@/components/AboutModal'
 import { LANGUAGES } from '@/lib/translate'
+import { TRANSLATIONS } from '@/lib/translations'
 
 export default function Home() {
     const [refreshTrigger, setRefreshTrigger] = useState(0)
@@ -22,13 +23,15 @@ export default function Home() {
         }
     }, [])
 
+    const t = TRANSLATIONS[targetLang] || TRANSLATIONS['en']
+
     return (
         <main className={styles.main}>
             <header className={styles.header}>
                 <div className={styles.headerLeft}></div> {/* Spacer for centering */}
                 <div className={styles.headerTitle}>
                     <h1 className={styles.title}>The Continuity</h1>
-                    <p className={styles.subtitle}>A Global Collaborative Novel</p>
+                    <p className={styles.subtitle}>{t.subtitle}</p>
                 </div>
                 <div className={styles.headerControls}>
                     <select
@@ -43,25 +46,26 @@ export default function Home() {
                     <button
                         onClick={() => setShowGuide(true)}
                         className={styles.iconBtn}
-                        aria-label="How to use"
+                        aria-label={t.header.howToUse}
+                        title={t.header.howToUse}
                     >
                         ?
                     </button>
                     <button
                         onClick={() => setShowAbout(true)}
                         className={styles.iconBtn}
-                        aria-label="About"
+                        aria-label={t.header.about}
+                        title={t.header.about}
                     >
                         i
                     </button>
                 </div>
             </header>
 
-            <GuideModal isOpen={showGuide} onClose={() => setShowGuide(false)} />
-            <AboutModal isOpen={showAbout} onClose={() => setShowAbout(false)} />
+            <GuideModal isOpen={showGuide} onClose={() => setShowGuide(false)} lang={targetLang} />
+            <AboutModal isOpen={showAbout} onClose={() => setShowAbout(false)} lang={targetLang} />
 
             <div className={styles.contentWrapper}>
-                {/* Left: Feed */}
                 {/* Left: Feed */}
                 <section className={styles.feedSection}>
                     <div className={styles.scrollArea}>
@@ -72,7 +76,7 @@ export default function Home() {
                 {/* Right: Input */}
                 <section className={styles.inputSection}>
 
-                    <StoryInput onStoryAdded={() => setRefreshTrigger(prev => prev + 1)} />
+                    <StoryInput onStoryAdded={() => setRefreshTrigger(prev => prev + 1)} lang={targetLang} />
                 </section>
             </div>
         </main>

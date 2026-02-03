@@ -1,13 +1,19 @@
-'use client'
-
 import { useState, useEffect } from 'react'
 import { supabase } from '@/lib/supabase'
 import styles from './StoryInput.module.css'
+import { TRANSLATIONS } from '@/lib/translations'
 
-export default function StoryInput({ onStoryAdded }: { onStoryAdded: () => void }) {
+interface StoryInputProps {
+    onStoryAdded: () => void;
+    lang: string;
+}
+
+export default function StoryInput({ onStoryAdded, lang }: StoryInputProps) {
     const [content, setContent] = useState('')
     const [loading, setLoading] = useState(false)
     const [cooldown, setCooldown] = useState(0)
+
+    const t = TRANSLATIONS[lang] || TRANSLATIONS['en']
 
     useEffect(() => {
         // Check for existing cooldown on mount
@@ -51,6 +57,17 @@ export default function StoryInput({ onStoryAdded }: { onStoryAdded: () => void 
         setLoading(false)
     }
 
+    const formatTime = (seconds: number) => {
+        return `${Math.floor(seconds / 60)}:${(seconds % 60).toString().padStart(2, '0')}`
+    }
+
+    const getPlaceholder = () => {
+        if (cooldown > 0) {
+            return t.input.placeholderCooldown.replace('{time}', formatTime(cooldown))
+        }
+        return t.input.placeholder
+    }
+
     return (
         <div className={`glass-panel ${styles.container}`}>
             <form onSubmit={handleSubmit} className={styles.form}>
@@ -59,18 +76,18 @@ export default function StoryInput({ onStoryAdded }: { onStoryAdded: () => void 
                         className={styles.textarea}
                         value={content}
                         onChange={(e) => setContent(e.target.value.slice(0, 100))}
-                        placeholder={cooldown > 0 ? `Please wait ${Math.floor(cooldown / 60)}:${(cooldown % 60).toString().padStart(2, '0')} to contribute again.` : "Write the next sentence..."}
+                        placeholder={getPlaceholder()}
                         disabled={loading || cooldown > 0}
                         maxLength={100}
                     />
-                    <span className={styles.counter}>{content.length}/100</span>
+                    <span className={styles.counter}>{t.input.charCount.replace('{current}', content.length)}</span>
                 </div>
                 <button
                     type="submit"
                     className="btn-primary"
                     disabled={loading || !content.trim() || cooldown > 0}
                 >
-                    {loading ? 'Posting...' : cooldown > 0 ? 'Cooldown' : 'Contribute'}
+                    {loading ? t.input.buttonPosting : cooldown > 0 ? t.input.buttonCooldown : t.input.buttonContribute}
                 </button>
             </form>
         </div>

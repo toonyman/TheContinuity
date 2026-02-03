@@ -15,13 +15,19 @@ export default function Home() {
                 <p className={styles.subtitle}>A Global Collaborative Novel</p>
             </header>
 
-            <section className={styles.scrollArea}>
-                <StoryFeed refreshTrigger={refreshTrigger} />
-            </section>
+            <div className={styles.contentWrapper}>
+                {/* Left: Feed */}
+                <section className={styles.feedSection}>
+                    <div className={styles.scrollArea}>
+                        <StoryFeed refreshTrigger={refreshTrigger} />
+                    </div>
+                </section>
 
-            <footer className={styles.footer}>
-                <StoryInput onStoryAdded={() => setRefreshTrigger(prev => prev + 1)} />
-            </footer>
+                {/* Right: Input */}
+                <section className={styles.inputSection}>
+                    <StoryInput onStoryAdded={() => setRefreshTrigger(prev => prev + 1)} />
+                </section>
+            </div>
         </main>
     )
 }

@@ -1,21 +1,21 @@
 .container {
     width: 100%;
-    max-width: 600px;
-    margin: 2rem auto;
+    max-width: 100%;
+    /* Ensure it doesn't overflow */
+    box-sizing: border-box;
+    /* Prevent padding from adding to width */
+    margin: 2rem 0;
+    /* Align with flow, remove auto horizontal margin */
     backdrop-filter: blur(20px);
     background: rgba(255, 255, 255, 0.03);
     border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 2rem;
+    /* Add internal padding */
+    border-radius: 8px;
+    /* Smooth corners */
 }
 
-.form {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-}
-
-.inputWrapper {
-    position: relative;
-}
+/* ... existing code ... */
 
 .textarea {
     width: 100%;
@@ -28,7 +28,8 @@
     line-height: 1.6;
     padding: 1rem 0;
     resize: none;
-    transition: all 0.3s ease;
+    min-height: 250px;
+    /* Greatly increased height */
 }
 
 .textarea:focus {

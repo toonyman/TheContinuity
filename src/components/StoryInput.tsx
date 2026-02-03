@@ -62,7 +62,6 @@ export default function StoryInput({ onStoryAdded }: { onStoryAdded: () => void 
                         placeholder={cooldown > 0 ? `Please wait ${Math.floor(cooldown / 60)}:${(cooldown % 60).toString().padStart(2, '0')} to contribute again.` : "Write the next sentence..."}
                         disabled={loading || cooldown > 0}
                         maxLength={100}
-                        rows={2}
                     />
                     <span className={styles.counter}>{content.length}/100</span>
                 </div>

@@ -97,12 +97,12 @@
     flex-direction: column;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
+    /* Align to top */
     align-items: center;
-    padding: 2rem 4rem;
-    /* Increased padding */
+    padding: 6rem 2rem;
+    /* Top padding for spacing, reduced side padding to prevent cutoff */
     min-height: 400px;
-    /* Ensure vertical height */
     background: rgba(255, 255, 255, 0.02);
     backdrop-filter: blur(10px);
 }

@@ -56,7 +56,8 @@ export default function StoryFeed({ refreshTrigger, targetLang }: StoryFeedProps
     // Incrementally fetch translations for new stories
     useEffect(() => {
         const translateMissing = async () => {
-            if (targetLang === 'en') return
+            // Removed targetLang === 'en' check to allow translation from other languages TO English.
+            // translateText handles skipping if source == target.
 
             const missingStories = stories.filter(
                 (s) => !translatedStories[s.id] && s.content

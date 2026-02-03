@@ -2,6 +2,8 @@ export interface TranslationResponse {
     responseData: {
         translatedText: string
     }
+    responseStatus: number
+    responseDetails: string
 }
 
 export const LANGUAGES = [

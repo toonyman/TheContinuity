@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://thecontinuity.app/sitemap.xml
+
+# Crawl-delay (optional, adjust if needed)
+# Crawl-delay: 1

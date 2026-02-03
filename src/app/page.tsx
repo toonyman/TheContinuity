@@ -14,6 +14,7 @@ export default function Home() {
     const [targetLang, setTargetLang] = useState('en')
     const [showGuide, setShowGuide] = useState(false)
     const [showAbout, setShowAbout] = useState(false)
+    const [isMenuOpen, setIsMenuOpen] = useState(false)
 
     useEffect(() => {
         const visited = localStorage.getItem('hasVisited')
@@ -28,37 +29,60 @@ export default function Home() {
     return (
         <main className={styles.main}>
             <header className={styles.header}>
-                <div className={styles.headerLeft}></div> {/* Spacer for centering */}
+                <div className={styles.headerLeft}></div>
                 <div className={styles.headerTitle}>
                     <h1 className={styles.title}>The Continuity</h1>
                     <p className={styles.subtitle}>{t.subtitle}</p>
                 </div>
                 <div className={styles.headerControls}>
-                    <select
-                        value={targetLang}
-                        onChange={(e) => setTargetLang(e.target.value)}
-                        className={styles.langSelect}
-                    >
-                        {LANGUAGES.map(lang => (
-                            <option key={lang.code} value={lang.code} className={styles.langOption}>{lang.name}</option>
-                        ))}
-                    </select>
                     <button
-                        onClick={() => setShowGuide(true)}
-                        className={styles.iconBtn}
-                        aria-label={t.header.howToUse}
-                        title={t.header.howToUse}
+                        className={styles.hamburgerBtn}
+                        onClick={() => setIsMenuOpen(!isMenuOpen)}
+                        aria-label="Menu"
                     >
-                        ?
+                        <span className={`${styles.hamburgerIcon} ${isMenuOpen ? styles.open : ''}`}></span>
                     </button>
-                    <button
-                        onClick={() => setShowAbout(true)}
-                        className={styles.iconBtn}
-                        aria-label={t.header.about}
-                        title={t.header.about}
-                    >
-                        i
-                    </button>
+
+                    {isMenuOpen && (
+                        <div className={styles.menuDrawer}>
+                            <button className={styles.closeMenuBtn} onClick={() => setIsMenuOpen(false)} aria-label="Close menu">&times;</button>
+                            <div className={styles.menuContent}>
+                                <div className={styles.menuItem}>
+                                    <label>Language</label>
+                                    <select
+                                        value={targetLang}
+                                        onChange={(e) => {
+                                            setTargetLang(e.target.value)
+                                            setIsMenuOpen(false)
+                                        }}
+                                        className={styles.langSelect}
+                                    >
+                                        {LANGUAGES.map(lang => (
+                                            <option key={lang.code} value={lang.code} className={styles.langOption}>{lang.name}</option>
+                                        ))}
+                                    </select>
+                                </div>
+                                <button
+                                    onClick={() => {
+                                        setShowGuide(true)
+                                        setIsMenuOpen(false)
+                                    }}
+                                    className={styles.menuBtn}
+                                >
+                                    {t.header.howToUse}
+                                </button>
+                                <button
+                                    onClick={() => {
+                                        setShowAbout(true)
+                                        setIsMenuOpen(false)
+                                    }}
+                                    className={styles.menuBtn}
+                                >
+                                    {t.header.about}
+                                </button>
+                            </div>
+                        </div>
+                    )}
                 </div>
             </header>
 
@@ -66,19 +90,20 @@ export default function Home() {
             <AboutModal isOpen={showAbout} onClose={() => setShowAbout(false)} lang={targetLang} />
 
             <div className={styles.contentWrapper}>
-                {/* Left: Feed */}
                 <section className={styles.feedSection}>
                     <div className={styles.scrollArea}>
-                        <StoryFeed refreshTrigger={refreshTrigger} targetLang={targetLang} />
+                        <div className={styles.feedContainer}>
+                            <StoryFeed refreshTrigger={refreshTrigger} targetLang={targetLang} />
+                            {/* Spacer to prevent input overlay on last item */}
+                            <div className={styles.feedBottomSpacer}></div>
+                        </div>
                     </div>
                 </section>
-
-                {/* Right: Input */}
-                <section className={styles.inputSection}>
-
-                    <StoryInput onStoryAdded={() => setRefreshTrigger(prev => prev + 1)} lang={targetLang} />
-                </section>
             </div>
+
+            <footer className={styles.inputContainer}>
+                <StoryInput onStoryAdded={() => setRefreshTrigger(prev => prev + 1)} lang={targetLang} />
+            </footer>
         </main>
     )
 }

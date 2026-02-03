@@ -1,30 +1,56 @@
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap');
 
 :root {
-  --background: #050505;
+  --background: #000000;
   --foreground: #e0e0e0;
-  --primary: #d4af37; /* Metallic Gold */
+  --primary: #d4af37;
+  /* Metallic Gold */
   --primary-hover: #f1c40f;
   --accent: #333333;
   --glass: rgba(255, 255, 255, 0.05);
   --border: rgba(255, 255, 255, 0.1);
   --font-sans: 'Outfit', sans-serif;
   --font-serif: 'Playfair Display', serif;
+
+  /* Responsive spacing */
+  --spacing-xs: 0.5rem;
+  --spacing-sm: 1rem;
+  --spacing-md: 2rem;
+  --spacing-lg: 3rem;
+  --spacing-xl: 4rem;
 }
 
 html,
 body {
   max-width: 100vw;
   overflow-x: hidden;
-  background: var(--background);
+  background-color: #000000 !important;
+  background-image: none !important;
   color: var(--foreground);
   font-family: var(--font-sans);
   margin: 0;
   padding: 0;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-h1, h2, h3, h4, h5, h6 {
+/* Force removal of any potential blue glows/gradients */
+body::before,
+body::after,
+main::before,
+main::after {
+  display: none !important;
+  content: none !important;
+  background: none !important;
+  box-shadow: none !important;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-family: var(--font-serif);
   font-weight: 700;
   margin-bottom: 0.5em;
@@ -45,21 +71,90 @@ h1, h2, h3, h4, h5, h6 {
   border: 1px solid var(--primary);
   color: var(--primary);
   padding: 0.8rem 2rem;
+  min-height: 44px;
   border-radius: 50px;
   font-family: var(--font-sans);
   text-transform: uppercase;
   letter-spacing: 2px;
   cursor: pointer;
   transition: all 0.3s ease;
+  -webkit-tap-highlight-color: transparent;
+  font-size: 0.9rem;
 }
 
-.btn-primary:hover {
+.btn-primary:hover,
+.btn-primary:focus {
   background: var(--primary);
   color: #000;
   box-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+.btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 a {
   color: inherit;
   text-decoration: none;
+}
+
+/* Focus visible for keyboard navigation */
+*:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+/* Responsive Typography */
+@media (max-width: 480px) {
+  :root {
+    --spacing-sm: 0.75rem;
+    --spacing-md: 1.5rem;
+    --spacing-lg: 2rem;
+    --spacing-xl: 2.5rem;
+  }
+
+  .glass-panel {
+    padding: 1rem;
+    border-radius: 8px;
+  }
+
+  .btn-primary {
+    padding: 0.7rem 1.5rem;
+    font-size: 0.85rem;
+    letter-spacing: 1.5px;
+  }
+}
+
+@media (min-width: 481px) and (max-width: 768px) {
+  .glass-panel {
+    padding: 1.5rem;
+  }
+}
+
+/* Accessibility - High Contrast Mode */
+@media (prefers-contrast: high) {
+  :root {
+    --border: rgba(255, 255, 255, 0.3);
+  }
+
+
+  .btn-primary {
+    border-width: 2px;
+  }
+}
+
+/* Accessibility - Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

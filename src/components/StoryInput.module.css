@@ -1,52 +1,82 @@
 .container {
     width: 100%;
-    max-width: 100%;
-    /* Ensure it doesn't overflow */
-    box-sizing: border-box;
-    /* Prevent padding from adding to width */
-    margin: 2rem 0;
-    /* Align with flow, remove auto horizontal margin */
+    max-width: 800px;
+    background: rgba(255, 255, 255, 0.05);
     backdrop-filter: blur(20px);
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    padding: 2rem;
-    /* Add internal padding */
-    border-radius: 8px;
-    /* Smooth corners */
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    /* Made brighter */
+    border-radius: 24px;
+    padding: 0.75rem 1.5rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
-/* ... existing code ... */
+.container:focus-within {
+    transform: translateY(-5px);
+    border-color: rgba(212, 175, 55, 0.3);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6), 0 0 20px rgba(212, 175, 55, 0.1);
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    width: 100%;
+}
+
+.inputWrapper {
+    width: 100%;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
 
 .textarea {
     width: 100%;
     background: transparent;
     border: none;
-    border-bottom: 2px solid rgba(255, 255, 255, 0.1);
     color: var(--foreground);
     font-family: var(--font-serif);
-    font-size: 1.5rem;
-    line-height: 1.6;
-    padding: 1rem 0;
+    font-size: 0.96rem;
+    /* Matched with feed text size */
+    line-height: 1.5;
+    padding: 0.5rem 2.5rem 0.5rem 0;
     resize: none;
-    min-height: 250px;
-    /* Greatly increased height */
-}
-
-.textarea:focus {
+    min-height: 1.5rem;
+    max-height: 300px;
     outline: none;
-    border-bottom-color: var(--primary);
-    background: linear-gradient(to bottom, transparent 95%, rgba(212, 175, 55, 0.1) 100%);
+    overflow-y: hidden;
+    -webkit-tap-highlight-color: transparent;
 }
 
-.textarea::placeholder {
-    color: rgba(255, 255, 255, 0.3);
-    font-style: italic;
-}
-
-.counter {
+.submitBtn {
     position: absolute;
-    bottom: 10px;
+    bottom: 0.5rem;
     right: 0;
-    font-size: 0.8rem;
-    color: rgba(255, 255, 255, 0.4);
+    width: 32px;
+    height: 32px;
+    min-width: 32px;
+    min-height: 32px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s;
+    color: var(--primary);
+    z-index: 10;
+    pointer-events: auto;
+}
+
+.submitBtn:disabled {
+    opacity: 0.3;
+    cursor: default;
+    background: transparent;
+    color: var(--foreground);
+}
+
+.submitBtn:not(:disabled):hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
 }

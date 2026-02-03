@@ -42,6 +42,13 @@ export const TRANSLATIONS: Record<string, any> = {
             buttonCooldown: "Cooldown",
             buttonContribute: "Contribute",
             charCount: "{current}/100"
+        },
+        errors: {
+            safety: {
+                url: "Links and URLs are not allowed.",
+                badWord: "Your story contains inappropriate content.",
+                default: "Content cannot be posted."
+            }
         }
     },
     ko: {
@@ -85,6 +92,13 @@ export const TRANSLATIONS: Record<string, any> = {
             buttonCooldown: "대기 중",
             buttonContribute: "작성하기",
             charCount: "{current}/100"
+        },
+        errors: {
+            safety: {
+                url: "링크나 URL은 입력할 수 없습니다.",
+                badWord: "부적절한 내용이 포함되어 있습니다.",
+                default: "내용을 등록할 수 없습니다."
+            }
         }
     },
     ja: {
@@ -128,6 +142,13 @@ export const TRANSLATIONS: Record<string, any> = {
             buttonCooldown: "待機中",
             buttonContribute: "投稿する",
             charCount: "{current}/100"
+        },
+        errors: {
+            safety: {
+                url: "リンクやURLは入力できません。",
+                badWord: "不適切な内容が含まれています。",
+                default: "投稿できません。"
+            }
         }
     },
     "zh-CN": {
@@ -171,6 +192,13 @@ export const TRANSLATIONS: Record<string, any> = {
             buttonCooldown: "冷却中",
             buttonContribute: "投稿",
             charCount: "{current}/100"
+        },
+        errors: {
+            safety: {
+                url: "不允许包含链接或URL。",
+                badWord: "包含不当内容。",
+                default: "无法发布内容。"
+            }
         }
     }
     // Add other languages as needed, fallback to English logic handles missing keys ideally,

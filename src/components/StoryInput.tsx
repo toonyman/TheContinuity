@@ -1,7 +1,9 @@
-import { useState, useEffect } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { supabase } from '@/lib/supabase'
 import styles from './StoryInput.module.css'
 import { TRANSLATIONS } from '@/lib/translations'
+
+import { checkContentSafety } from '@/lib/contentSafety'
 
 interface StoryInputProps {
     onStoryAdded: () => void;
@@ -11,32 +13,34 @@ interface StoryInputProps {
 export default function StoryInput({ onStoryAdded, lang }: StoryInputProps) {
     const [content, setContent] = useState('')
     const [loading, setLoading] = useState(false)
-    const [cooldown, setCooldown] = useState(0)
+    const textareaRef = useRef<HTMLTextAreaElement>(null)
 
     const t = TRANSLATIONS[lang] || TRANSLATIONS['en']
 
     useEffect(() => {
-        // Check for existing cooldown on mount
-        const lastPosted = localStorage.getItem('lastPosted')
-        if (lastPosted) {
-            const timePassed = Date.now() - parseInt(lastPosted)
-            const remaining = Math.max(0, 300000 - timePassed) // 5 minutes = 300000ms
-            setCooldown(Math.ceil(remaining / 1000))
+        // Auto-expand textarea
+        if (textareaRef.current) {
+            textareaRef.current.style.height = 'auto'
+            textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`
         }
-    }, [])
-
-    useEffect(() => {
-        if (cooldown > 0) {
-            const timer = setInterval(() => {
-                setCooldown((prev) => prev - 1)
-            }, 1000)
-            return () => clearInterval(timer)
-        }
-    }, [cooldown])
+    }, [content])
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
-        if (!content.trim() || loading || cooldown > 0) return
+        if (!content.trim() || loading) return
+
+        // Content Safety Check
+        const safetyCheck = checkContentSafety(content)
+        if (!safetyCheck.safe) {
+            let errorMessage = t.errors?.safety?.default || "Content cannot be posted."
+            if (safetyCheck.reason === 'url') {
+                errorMessage = t.errors?.safety?.url || errorMessage
+            } else if (safetyCheck.reason === 'bad_word') {
+                errorMessage = t.errors?.safety?.badWord || errorMessage
+            }
+            alert(errorMessage)
+            return
+        }
 
         setLoading(true)
 
@@ -49,47 +53,58 @@ export default function StoryInput({ onStoryAdded, lang }: StoryInputProps) {
             alert('Failed to post story. Please try again.')
         } else {
             setContent('')
-            const now = Date.now()
-            localStorage.setItem('lastPosted', now.toString())
-            setCooldown(300) // 300 seconds = 5 minutes
+            if (textareaRef.current) {
+                textareaRef.current.style.height = 'auto'
+            }
             onStoryAdded()
         }
         setLoading(false)
     }
 
-    const formatTime = (seconds: number) => {
-        return `${Math.floor(seconds / 60)}:${(seconds % 60).toString().padStart(2, '0')}`
-    }
-
-    const getPlaceholder = () => {
-        if (cooldown > 0) {
-            return t.input.placeholderCooldown.replace('{time}', formatTime(cooldown))
+    const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+        const val = e.target.value
+        // Strict 100 character limit
+        if (val.length <= 100) {
+            setContent(val)
         }
-        return t.input.placeholder
     }
 
     return (
-        <div className={`glass-panel ${styles.container}`}>
+        <div className={styles.container}>
             <form onSubmit={handleSubmit} className={styles.form}>
                 <div className={styles.inputWrapper}>
                     <textarea
+                        ref={textareaRef}
                         className={styles.textarea}
                         value={content}
-                        onChange={(e) => setContent(e.target.value.slice(0, 100))}
-                        placeholder={getPlaceholder()}
-                        disabled={loading || cooldown > 0}
-                        maxLength={100}
+                        onChange={handleChange}
+                        placeholder={t.input.placeholder}
+                        disabled={loading}
+                        rows={1}
+                        spellCheck={false}
                     />
-                    <span className={styles.counter}>{t.input.charCount.replace('{current}', content.length)}</span>
                 </div>
                 <button
                     type="submit"
-                    className="btn-primary"
-                    disabled={loading || !content.trim() || cooldown > 0}
+                    className={styles.submitBtn}
+                    disabled={loading || !content.trim()}
+                    aria-label={t.input.buttonContribute}
                 >
-                    {loading ? t.input.buttonPosting : cooldown > 0 ? t.input.buttonCooldown : t.input.buttonContribute}
+                    {loading ? (
+                        <div className="spinner-small" style={{ width: '16px', height: '16px', border: '2px solid rgba(255,255,255,0.1)', borderTopColor: 'var(--primary)', borderRadius: '50%', animation: 'spin 0.6s linear infinite' }}></div>
+                    ) : (
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                            <line x1="22" y1="2" x2="11" y2="13"></line>
+                            <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                        </svg>
+                    )}
                 </button>
             </form>
+            <style jsx>{`
+                @keyframes spin {
+                    to { transform: rotate(360deg); }
+                }
+            `}</style>
         </div>
     )
 }

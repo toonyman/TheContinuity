@@ -98,27 +98,28 @@
     height: 100%;
 }
 
-.feedHeader {
-    padding: 1rem;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-    background: rgba(0, 0, 0, 0.2);
-    display: flex;
-    justify-content: flex-start;
-    /* Align left */
-}
+/* Removed feedHeader as it's no longer used */
 
 .langSelect {
-    background: transparent;
-    border: 1px solid var(--border);
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
     color: var(--foreground);
     padding: 0.4rem 0.8rem;
     border-radius: 4px;
     font-size: 0.85rem;
     outline: none;
     cursor: pointer;
+    font-family: var(--font-sans);
+    transition: all 0.2s;
 }
 
-.langSelect option {
+.langSelect:hover {
+    background: var(--primary);
+    color: #000;
+    border-color: var(--primary);
+}
+
+.langOption {
     background: #000;
     color: #fff;
 }

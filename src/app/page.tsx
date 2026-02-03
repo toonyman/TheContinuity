@@ -31,6 +31,15 @@ export default function Home() {
                     <p className={styles.subtitle}>A Global Collaborative Novel</p>
                 </div>
                 <div className={styles.headerControls}>
+                    <select
+                        value={targetLang}
+                        onChange={(e) => setTargetLang(e.target.value)}
+                        className={styles.langSelect}
+                    >
+                        {LANGUAGES.map(lang => (
+                            <option key={lang.code} value={lang.code} className={styles.langOption}>{lang.name}</option>
+                        ))}
+                    </select>
                     <button
                         onClick={() => setShowGuide(true)}
                         className={styles.iconBtn}
@@ -53,18 +62,8 @@ export default function Home() {
 
             <div className={styles.contentWrapper}>
                 {/* Left: Feed */}
+                {/* Left: Feed */}
                 <section className={styles.feedSection}>
-                    <div className={styles.feedHeader}>
-                        <select
-                            value={targetLang}
-                            onChange={(e) => setTargetLang(e.target.value)}
-                            className={styles.langSelect}
-                        >
-                            {LANGUAGES.map(lang => (
-                                <option key={lang.code} value={lang.code}>{lang.name}</option>
-                            ))}
-                        </select>
-                    </div>
                     <div className={styles.scrollArea}>
                         <StoryFeed refreshTrigger={refreshTrigger} targetLang={targetLang} />
                     </div>

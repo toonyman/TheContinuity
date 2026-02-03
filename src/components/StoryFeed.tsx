@@ -44,25 +44,41 @@ export default function StoryFeed({ refreshTrigger }: { refreshTrigger: number }
         fetchStories()
     }, [refreshTrigger])
 
+    // Clear translations when target language changes
     useEffect(() => {
-        const translateAll = async () => {
-            const newTranslations: Record<string, string> = {}
-            for (const story of stories) {
-                if (targetLang !== 'en') {
-                    // In production, you would cache this or batch requests
+        setTranslatedStories({})
+    }, [targetLang])
+
+    // Incrementally fetch translations for new stories
+    useEffect(() => {
+        const translateMissing = async () => {
+            if (targetLang === 'en') return
+
+            const missingStories = stories.filter(
+                (s) => !translatedStories[s.id] && s.content
+            )
+
+            if (missingStories.length === 0) return
+
+            // Optimize: Promise.all for parallel fetching
+            const results = await Promise.all(
+                missingStories.map(async (story) => {
                     const translated = await translateText(story.content, targetLang)
-                    newTranslations[story.id] = translated
-                }
-            }
-            setTranslatedStories(newTranslations)
+                    return { id: story.id, text: translated }
+                })
+            )
+
+            setTranslatedStories((prev) => {
+                const next = { ...prev }
+                results.forEach((r) => {
+                    next[r.id] = r.text
+                })
+                return next
+            })
         }
 
-        if (stories.length > 0 && targetLang !== 'en') {
-            translateAll()
-        } else {
-            setTranslatedStories({})
-        }
-    }, [stories, targetLang])
+        translateMissing()
+    }, [stories, targetLang, translatedStories])
 
     useEffect(() => {
         bottomRef.current?.scrollIntoView({ behavior: 'smooth' })

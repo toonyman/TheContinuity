@@ -3,14 +3,18 @@
 import { useEffect, useState, useRef } from 'react'
 import { supabase } from '@/lib/supabase'
 import { Story } from '@/types'
-import { translateText, LANGUAGES } from '@/lib/translate'
 import styles from './StoryFeed.module.css'
+import { translateText } from '@/lib/translate'
 
-export default function StoryFeed({ refreshTrigger }: { refreshTrigger: number }) {
+interface StoryFeedProps {
+    refreshTrigger: number;
+    targetLang: string;
+}
+
+export default function StoryFeed({ refreshTrigger, targetLang }: StoryFeedProps) {
     const [stories, setStories] = useState<Story[]>([])
-    const [targetLang, setTargetLang] = useState('en')
-    const [translatedStories, setTranslatedStories] = useState<Record<string, string>>({})
     const bottomRef = useRef<HTMLDivElement>(null)
+    const [translatedStories, setTranslatedStories] = useState<Record<string, string>>({})
 
     const fetchStories = async () => {
         const { data, error } = await supabase
@@ -87,18 +91,6 @@ export default function StoryFeed({ refreshTrigger }: { refreshTrigger: number }
 
     return (
         <div className={styles.feedWrapper}>
-            <div className={styles.controls}>
-                <select
-                    value={targetLang}
-                    onChange={(e) => setTargetLang(e.target.value)}
-                    className={styles.langSelect}
-                >
-                    {LANGUAGES.map(lang => (
-                        <option key={lang.code} value={lang.code}>{lang.name}</option>
-                    ))}
-                </select>
-            </div>
-
             <div className={styles.feed}>
                 {stories.length === 0 ? (
                     <div className={styles.emptyState}>

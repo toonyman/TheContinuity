@@ -15,6 +15,8 @@ export default function StoryFeed({ refreshTrigger, targetLang }: StoryFeedProps
     const [stories, setStories] = useState<Story[]>([])
     const bottomRef = useRef<HTMLDivElement>(null)
     const [translatedStories, setTranslatedStories] = useState<Record<string, string>>({})
+    // Track translated stories to safely check status without adding state dependency
+    const translatedIds = useRef<Set<string>>(new Set())
 
     const fetchStories = async () => {
         const { data, error } = await supabase
@@ -51,45 +53,48 @@ export default function StoryFeed({ refreshTrigger, targetLang }: StoryFeedProps
     // Clear translations when target language changes
     useEffect(() => {
         setTranslatedStories({})
+        translatedIds.current.clear()
     }, [targetLang])
 
     // Incrementally fetch translations for new stories
     useEffect(() => {
-        let isCancelled = false;
+        let isCancelled = false
 
         const translateMissing = async () => {
-            // Find stories that haven't been translated yet
+            // Find stories that haven't been translated yet using Ref check
             const missingStories = stories.filter(
-                (s) => !translatedStories[s.id] && s.content
+                (s) => !translatedIds.current.has(s.id) && s.content
             )
 
             if (missingStories.length === 0) return
 
-            // Process sequentially to avoid API rate limits (MyMemory free tier)
-            for (const story of missingStories) {
-                if (isCancelled) break;
+            // Mark as processing immediately to prevent duplicate runs
+            missingStories.forEach(s => translatedIds.current.add(s.id))
 
-                // Simple check to skip if source == target (handled in lib but good optimization)
+            // Process sequentially to avoid API rate limits
+            for (const story of missingStories) {
+                if (isCancelled) break
+
+                // Optimistic check for English to English
                 if (targetLang === 'en' && /^[A-Za-z0-9\s.,?!'"]+$/.test(story.content)) {
-                    // Optimized update for English content when target is English
-                    setTranslatedStories(prev => ({ ...prev, [story.id]: story.content }));
-                    continue;
+                    setTranslatedStories(prev => ({ ...prev, [story.id]: story.content }))
+                    continue
                 }
 
                 try {
-                    const translated = await translateText(story.content, targetLang);
+                    const translated = await translateText(story.content, targetLang)
 
-                    if (isCancelled) break;
+                    if (isCancelled) break
 
                     setTranslatedStories(prev => ({
                         ...prev,
                         [story.id]: translated
-                    }));
+                    }))
 
-                    // Add delay between requests to be gentle on the API
-                    await new Promise(resolve => setTimeout(resolve, 300));
+                    // Gentle delay for API
+                    await new Promise(resolve => setTimeout(resolve, 300))
                 } catch (e) {
-                    console.error(`Failed to translate story ${story.id}`, e);
+                    console.error(`Failed to translate story ${story.id}`, e)
                 }
             }
         }
@@ -97,9 +102,9 @@ export default function StoryFeed({ refreshTrigger, targetLang }: StoryFeedProps
         translateMissing()
 
         return () => {
-            isCancelled = true;
+            isCancelled = true
         }
-    }, [stories, targetLang, translatedStories])
+    }, [stories, targetLang])
 
     useEffect(() => {
         bottomRef.current?.scrollIntoView({ behavior: 'smooth' })

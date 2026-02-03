@@ -32,3 +32,8 @@ create index stories_parent_id_idx on public.stories(parent_id);
 
 -- Create an index on created_at for sorting
 create index stories_created_at_idx on public.stories(created_at);
+
+
+-- [관리용] 데이터 전체 삭제 (초기화)
+-- Supabase 대시보드 SQL Editor에서 아래 명령어를 실행하세요.
+-- TRUNCATE TABLE public.stories;

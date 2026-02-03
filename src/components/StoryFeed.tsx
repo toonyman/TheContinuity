@@ -55,35 +55,50 @@ export default function StoryFeed({ refreshTrigger, targetLang }: StoryFeedProps
 
     // Incrementally fetch translations for new stories
     useEffect(() => {
-        const translateMissing = async () => {
-            // Removed targetLang === 'en' check to allow translation from other languages TO English.
-            // translateText handles skipping if source == target.
+        let isCancelled = false;
 
+        const translateMissing = async () => {
+            // Find stories that haven't been translated yet
             const missingStories = stories.filter(
                 (s) => !translatedStories[s.id] && s.content
             )
 
-
             if (missingStories.length === 0) return
 
-            // Optimize: Promise.all for parallel fetching
-            const results = await Promise.all(
-                missingStories.map(async (story) => {
-                    const translated = await translateText(story.content, targetLang)
-                    return { id: story.id, text: translated }
-                })
-            )
+            // Process sequentially to avoid API rate limits (MyMemory free tier)
+            for (const story of missingStories) {
+                if (isCancelled) break;
 
-            setTranslatedStories((prev) => {
-                const next = { ...prev }
-                results.forEach((r) => {
-                    next[r.id] = r.text
-                })
-                return next
-            })
+                // Simple check to skip if source == target (handled in lib but good optimization)
+                if (targetLang === 'en' && /^[A-Za-z0-9\s.,?!'"]+$/.test(story.content)) {
+                    // Optimized update for English content when target is English
+                    setTranslatedStories(prev => ({ ...prev, [story.id]: story.content }));
+                    continue;
+                }
+
+                try {
+                    const translated = await translateText(story.content, targetLang);
+
+                    if (isCancelled) break;
+
+                    setTranslatedStories(prev => ({
+                        ...prev,
+                        [story.id]: translated
+                    }));
+
+                    // Add delay between requests to be gentle on the API
+                    await new Promise(resolve => setTimeout(resolve, 300));
+                } catch (e) {
+                    console.error(`Failed to translate story ${story.id}`, e);
+                }
+            }
         }
 
         translateMissing()
+
+        return () => {
+            isCancelled = true;
+        }
     }, [stories, targetLang, translatedStories])
 
     useEffect(() => {

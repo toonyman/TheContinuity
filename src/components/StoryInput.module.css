@@ -1,0 +1,51 @@
+.container {
+    width: 100%;
+    max-width: 600px;
+    margin: 2rem auto;
+    backdrop-filter: blur(20px);
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.inputWrapper {
+    position: relative;
+}
+
+.textarea {
+    width: 100%;
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+    color: var(--foreground);
+    font-family: var(--font-serif);
+    font-size: 1.5rem;
+    line-height: 1.6;
+    padding: 1rem 0;
+    resize: none;
+    transition: all 0.3s ease;
+}
+
+.textarea:focus {
+    outline: none;
+    border-bottom-color: var(--primary);
+    background: linear-gradient(to bottom, transparent 95%, rgba(212, 175, 55, 0.1) 100%);
+}
+
+.textarea::placeholder {
+    color: rgba(255, 255, 255, 0.3);
+    font-style: italic;
+}
+
+.counter {
+    position: absolute;
+    bottom: 10px;
+    right: 0;
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.4);
+}

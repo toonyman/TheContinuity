@@ -1,0 +1,90 @@
+.feedWrapper {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.controls {
+    position: sticky;
+    top: 0;
+    display: flex;
+    justify-content: flex-end;
+    padding: 1rem;
+    z-index: 5;
+    background: linear-gradient(to bottom, #000 0%, transparent 100%);
+}
+
+.langSelect {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--foreground);
+    border: 1px solid var(--border);
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    backdrop-filter: blur(10px);
+    font-family: var(--font-sans);
+    cursor: pointer;
+    outline: none;
+}
+
+.langSelect:hover {
+    border-color: var(--primary);
+}
+
+.feed {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    padding: 1rem 0;
+}
+
+.storyNode {
+    padding: 0 1rem;
+    border-left: 2px solid rgba(212, 175, 55, 0.2);
+    margin-left: 1rem;
+    transition: all 0.5s ease;
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+}
+
+.storyNode:last-child {
+    border-left: 2px solid var(--primary);
+    opacity: 1;
+}
+
+.content {
+    font-family: var(--font-serif);
+    font-size: 1.2rem;
+    line-height: 1.8;
+    color: #e0e0e0;
+    margin: 0;
+}
+
+.originalText {
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.3);
+    font-style: italic;
+}
+
+.emptyState {
+    text-align: center;
+    padding: 4rem;
+    color: rgba(255, 255, 255, 0.4);
+    font-style: italic;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+:global(.animate-fade-in) {
+    animation: fadeIn 0.6s ease-out forwards;
+}

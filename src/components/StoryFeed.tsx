@@ -113,6 +113,44 @@ export default function StoryFeed({ refreshTrigger, targetLang }: StoryFeedProps
         bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
     }, [stories, translatedStories])
 
+    async function handleReaction(storyId: string, type: 'like' | 'dislike') {
+        const story = stories.find(s => s.id === storyId)
+        if (!story) return
+
+        // Ideally we should track user votes to prevent duplicate voting (using localStorage for simplicity)
+        const voteKey = `vote_${storyId}`
+        const currentVote = localStorage.getItem(voteKey)
+
+        if (currentVote === type) {
+            return
+        }
+
+        // Optimistic update
+        setStories(prev => prev.map(s => {
+            if (s.id === storyId) {
+                return {
+                    ...s,
+                    likes: type === 'like' ? (s.likes || 0) + 1 : (s.likes || 0),
+                    dislikes: type === 'dislike' ? (s.dislikes || 0) + 1 : (s.dislikes || 0)
+                }
+            }
+            return s
+        }))
+
+        localStorage.setItem(voteKey, type)
+
+        const { error } = await supabase
+            .from('stories')
+            .update({
+                [type === 'like' ? 'likes' : 'dislikes']: (type === 'like' ? (story.likes || 0) : (story.dislikes || 0)) + 1
+            })
+            .eq('id', storyId)
+
+        if (error) {
+            console.error('Error updating reaction:', error)
+        }
+    }
+
     return (
         <div className={styles.feedWrapper}>
             <div className={styles.feed}>
@@ -126,6 +164,24 @@ export default function StoryFeed({ refreshTrigger, targetLang }: StoryFeedProps
                             <p className={styles.content}>
                                 {translatedStories[story.id] || story.content}
                             </p>
+                            <div className={styles.reactionContainer}>
+                                <button
+                                    onClick={() => handleReaction(story.id, 'like')}
+                                    className={styles.reactionBtn}
+                                    title="Like"
+                                >
+                                    <span>👍</span>
+                                    <span className={styles.reactionCount}>{story.likes || 0}</span>
+                                </button>
+                                <button
+                                    onClick={() => handleReaction(story.id, 'dislike')}
+                                    className={styles.reactionBtn}
+                                    title="Dislike"
+                                >
+                                    <span>👎</span>
+                                    <span className={styles.reactionCount}>{story.dislikes || 0}</span>
+                                </button>
+                            </div>
                         </div>
                     ))
                 )}

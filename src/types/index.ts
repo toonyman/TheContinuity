@@ -5,4 +5,6 @@ export interface Story {
     author_geo: string | null
     created_at: string
     is_hidden: boolean
+    likes: number
+    dislikes: number
 }

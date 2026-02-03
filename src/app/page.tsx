@@ -19,7 +19,19 @@ export default function Home() {
 
             <div className={styles.contentWrapper}>
                 {/* Left: Feed */}
+                {/* Left: Feed */}
                 <section className={styles.feedSection}>
+                    <div className={styles.feedHeader}>
+                        <select
+                            value={targetLang}
+                            onChange={(e) => setTargetLang(e.target.value)}
+                            className={styles.langSelect}
+                        >
+                            {LANGUAGES.map(lang => (
+                                <option key={lang.code} value={lang.code}>{lang.name}</option>
+                            ))}
+                        </select>
+                    </div>
                     <div className={styles.scrollArea}>
                         <StoryFeed refreshTrigger={refreshTrigger} targetLang={targetLang} />
                     </div>
@@ -27,25 +39,6 @@ export default function Home() {
 
                 {/* Right: Input */}
                 <section className={styles.inputSection}>
-                    <div style={{ marginBottom: '2rem', textAlign: 'center' }}>
-                        <p style={{ marginBottom: '0.5rem', opacity: 0.7, fontSize: '0.9rem' }}>Translate Stories</p>
-                        <select
-                            value={targetLang}
-                            onChange={(e) => setTargetLang(e.target.value)}
-                            style={{
-                                background: 'rgba(255,255,255,0.1)',
-                                border: '1px solid var(--border)',
-                                color: 'var(--foreground)',
-                                padding: '0.5rem 1rem',
-                                borderRadius: '4px',
-                                outline: 'none'
-                            }}
-                        >
-                            {LANGUAGES.map(lang => (
-                                <option key={lang.code} value={lang.code} style={{ color: 'black' }}>{lang.name}</option>
-                            ))}
-                        </select>
-                    </div>
 
                     <StoryInput onStoryAdded={() => setRefreshTrigger(prev => prev + 1)} />
                 </section>

@@ -17,38 +17,21 @@ export const LANGUAGES = [
 ]
 
 
-// Basic language detection helper
-function detectLanguage(text: string): string {
-    const koPattern = /[\u3131-\uD79D]/;
-    const jaPattern = /[\u3040-\u30ff\u3400-\u4dbf\u4e00-\u9fff\uf900-\ufaff\uff66-\uff9f]/;
-    const zhPattern = /[\u4e00-\u9fa5]/;
-
-    // Check for Korean first (specific range)
-    if (koPattern.test(text)) return 'ko';
-
-    // Check for Japanese (Hiragana, Katakana)
-    if (jaPattern.test(text)) return 'ja';
-
-    // Check for Chinese (if not captured by above, though CJK overlaps)
-    // Simplified checks for this MVP
-    if (zhPattern.test(text)) return 'zh-CN';
-
-    return 'en'; // Default fallback
-}
 
 export async function translateText(
     text: string,
     targetLang: string,
-    sourceLang: string = 'auto'
+    sourceLang: string = 'Autodetect' // Use API's robust detection
 ): Promise<string> {
-    // Detect source language if set to auto
-    const actualSource = sourceLang === 'auto' ? detectLanguage(text) : sourceLang;
-
-    // Skip if source equals target
-    if (actualSource === targetLang) return text;
+    // If we rely on Autodetect, we can't easily skip source==target locally.
+    // We'll trust the API or if sourceLang is explicitly provided, we can skip.
+    if (sourceLang !== 'Autodetect' && sourceLang === targetLang) {
+        return text;
+    }
 
     // Using MyMemory API for true free/anonymous usage
-    const apiUrl = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=${actualSource}|${targetLang}`
+    // API requires 'Autodetect' (capitalized seems safer based on tests) if unknown
+    const apiUrl = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=${sourceLang}|${targetLang}`
 
     try {
         const res = await fetch(apiUrl)
@@ -59,7 +42,13 @@ export async function translateText(
         }
 
         const data: TranslationResponse = await res.json()
-        // Decode HTML entities if necessary using a basic replace or a library (simplifying here)
+
+        // Check for specific error message about invalid pair
+        if (data.responseStatus !== 200) {
+            console.warn('Translation API returned error:', data.responseDetails)
+            return text
+        }
+
         return data.responseData.translatedText
     } catch (error) {
         console.error('Translation error:', error)

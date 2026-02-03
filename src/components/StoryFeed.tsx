@@ -103,9 +103,6 @@ export default function StoryFeed({ refreshTrigger, targetLang }: StoryFeedProps
                             <p className={styles.content}>
                                 {translatedStories[story.id] || story.content}
                             </p>
-                            {translatedStories[story.id] && (
-                                <span className={styles.originalText}>{story.content}</span>
-                            )}
                         </div>
                     ))
                 )}

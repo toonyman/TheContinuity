@@ -21,16 +21,16 @@ export const LANGUAGES = [
 export async function translateText(
     text: string,
     targetLang: string,
-    sourceLang: string = 'Autodetect' // Use API's robust detection
+    sourceLang: string = 'auto' // Use API's robust detection
 ): Promise<string> {
-    // If we rely on Autodetect, we can't easily skip source==target locally.
+    // If we rely on Auto, we can't easily skip source==target locally.
     // We'll trust the API or if sourceLang is explicitly provided, we can skip.
-    if (sourceLang !== 'Autodetect' && sourceLang === targetLang) {
+    if (sourceLang !== 'auto' && sourceLang === targetLang) {
         return text;
     }
 
     // Using MyMemory API for true free/anonymous usage
-    // API requires 'Autodetect' (capitalized seems safer based on tests) if unknown
+    // API uses 'auto' for autodetection
     const apiUrl = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=${sourceLang}|${targetLang}`
 
     try {

@@ -71,8 +71,11 @@ export default function StoryFeed({ refreshTrigger, targetLang }: StoryFeedProps
             // Mark as processing immediately to prevent duplicate runs
             missingStories.forEach(s => translatedIds.current.add(s.id))
 
+            // Process newest stories first (since user is likely at the bottom)
+            const storiesToTranslate = [...missingStories].reverse()
+
             // Process sequentially to avoid API rate limits
-            for (const story of missingStories) {
+            for (const story of storiesToTranslate) {
                 if (isCancelled) break
 
                 // Optimistic check for English to English

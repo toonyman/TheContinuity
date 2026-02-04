@@ -56,20 +56,11 @@ export const metadata: Metadata = {
         siteName: siteName,
         title: siteName,
         description: siteDescription,
-        images: [
-            {
-                url: `${siteUrl}/og-image.png`,
-                width: 1200,
-                height: 630,
-                alt: 'The Continuity - A Global Collaborative Novel',
-            },
-        ],
     },
     twitter: {
         card: 'summary_large_image',
         title: siteName,
         description: siteDescription,
-        images: [`${siteUrl}/og-image.png`],
         creator: '@thecontinuity',
     },
     robots: {

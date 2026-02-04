@@ -8,6 +8,7 @@ import GuideModal from '@/components/GuideModal'
 import AboutModal from '@/components/AboutModal'
 import { LANGUAGES } from '@/lib/translate'
 import { TRANSLATIONS } from '@/lib/translations'
+import OnlineCount from '@/components/OnlineCount'
 
 export default function Home() {
     const [refreshTrigger, setRefreshTrigger] = useState(0)
@@ -29,7 +30,9 @@ export default function Home() {
     return (
         <main className={styles.main}>
             <header className={styles.header}>
-                <div className={styles.headerLeft}></div>
+                <div className={styles.headerLeft}>
+                    <OnlineCount lang={targetLang} />
+                </div>
                 <div className={styles.headerTitle}>
                     <h1 className={styles.title}>The Continuity</h1>
                     <p className={styles.subtitle}>{t.subtitle}</p>

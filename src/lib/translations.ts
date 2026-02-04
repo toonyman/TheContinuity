@@ -5,7 +5,8 @@ export const TRANSLATIONS: Record<string, any> = {
         subtitle: "A Global Collaborative Novel",
         header: {
             howToUse: "How to use",
-            about: "About"
+            about: "About",
+            online: "{count} Online"
         },
         guide: {
             title: "How to Participate",
@@ -53,7 +54,8 @@ export const TRANSLATIONS: Record<string, any> = {
         subtitle: "글로벌 릴레이 소설 프로젝트",
         header: {
             howToUse: "이용 방법",
-            about: "소개"
+            about: "소개",
+            online: "{count}명 접속중"
         },
         guide: {
             title: "참여 방법",
@@ -101,7 +103,8 @@ export const TRANSLATIONS: Record<string, any> = {
         subtitle: "世界をつなぐリレー小説",
         header: {
             howToUse: "使い方",
-            about: "紹介"
+            about: "紹介",
+            online: "{count}人オンライン"
         },
         guide: {
             title: "参加方法",
@@ -149,7 +152,8 @@ export const TRANSLATIONS: Record<string, any> = {
         subtitle: "全球接力小说",
         header: {
             howToUse: "使用说明",
-            about: "关于"
+            about: "关于",
+            online: "{count}人在线"
         },
         guide: {
             title: "参与方式",

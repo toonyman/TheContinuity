@@ -249,6 +249,35 @@
     overflow-wrap: break-word;
     /* Fix for text overflow */
     word-break: break-word;
+    position: relative;
+}
+
+.menuOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 900;
+    backdrop-filter: blur(2px);
+    animation: fadeIn 0.3s ease-out;
+}
+
+.feedBackgroundText {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%;
+    text-align: center;
+    color: rgba(255, 255, 255, 0.05);
+    font-size: 1.5rem;
+    font-weight: bold;
+    pointer-events: none;
+    z-index: 0;
+    line-height: 1.6;
+    font-family: var(--font-serif);
 }
 
 .scrollArea {

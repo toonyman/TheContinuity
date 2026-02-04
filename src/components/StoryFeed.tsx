@@ -140,8 +140,8 @@ export default function StoryFeed({ refreshTrigger, targetLang }: StoryFeedProps
         // Determine new state and update counts
         if (currentVote === type) {
             // Toggle off
-            if (type === 'like') newLikes--
-            else newDislikes--
+            if (type === 'like') newLikes = Math.max(0, newLikes - 1)
+            else newDislikes = Math.max(0, newDislikes - 1)
 
             localStorage.removeItem(`vote_${storyId}`)
             const newVotes = { ...userVotes }
@@ -151,8 +151,8 @@ export default function StoryFeed({ refreshTrigger, targetLang }: StoryFeedProps
             // New vote or switch vote
             if (currentVote) {
                 // Remove previous vote count
-                if (currentVote === 'like') newLikes--
-                else newDislikes--
+                if (currentVote === 'like') newLikes = Math.max(0, newLikes - 1)
+                else newDislikes = Math.max(0, newDislikes - 1)
             }
 
             // Add new vote count

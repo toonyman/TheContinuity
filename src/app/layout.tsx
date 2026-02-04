@@ -13,6 +13,7 @@ export const viewport: Viewport = {
     maximumScale: 5,
     userScalable: true,
     themeColor: '#d4af37',
+    viewportFit: 'cover',
 }
 
 export const metadata: Metadata = {

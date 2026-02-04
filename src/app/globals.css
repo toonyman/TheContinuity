@@ -37,9 +37,6 @@ body {
   padding: 0;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  /* Prevent scrolling on body */
-  position: fixed;
-  width: 100%;
 }
 
 /* Force removal of any potential blue glows/gradients */

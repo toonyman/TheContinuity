@@ -1,6 +1,7 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
+import { createPortal } from 'react-dom'
 import styles from './ReaderModal.module.css'
 
 interface ReaderModalProps {
@@ -12,6 +13,11 @@ interface ReaderModalProps {
 export default function ReaderModal({ isOpen, onClose, content }: ReaderModalProps) {
     const [isVisible, setIsVisible] = useState(false)
     const [copied, setCopied] = useState(false)
+    const [mounted, setMounted] = useState(false)
+
+    useEffect(() => {
+        setMounted(true)
+    }, [])
 
     useEffect(() => {
         if (isOpen) {
@@ -30,9 +36,10 @@ export default function ReaderModal({ isOpen, onClose, content }: ReaderModalPro
         setTimeout(() => setCopied(false), 2000)
     }
 
+    if (!mounted) return null
     if (!isVisible && !isOpen) return null
 
-    return (
+    return createPortal(
         <div className={`${styles.overlay} ${isOpen ? styles.open : ''}`} onClick={onClose}>
             <div className={`${styles.modal} ${isOpen ? styles.open : ''}`} onClick={e => e.stopPropagation()}>
                 <div className={styles.header}>
@@ -60,6 +67,7 @@ export default function ReaderModal({ isOpen, onClose, content }: ReaderModalPro
                     </div>
                 </div>
             </div>
-        </div>
+        </div>,
+        document.body
     )
 }

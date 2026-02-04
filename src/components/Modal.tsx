@@ -1,3 +1,5 @@
+import { useEffect, useState } from 'react'
+import { createPortal } from 'react-dom'
 import styles from './Modal.module.css'
 
 interface ModalProps {
@@ -8,9 +10,23 @@ interface ModalProps {
 }
 
 export default function Modal({ isOpen, onClose, title, children }: ModalProps) {
-    if (!isOpen) return null;
+    const [mounted, setMounted] = useState(false)
 
-    return (
+    useEffect(() => {
+        setMounted(true)
+        if (isOpen) {
+            document.body.style.overflow = 'hidden'
+        } else {
+            document.body.style.overflow = 'unset'
+        }
+        return () => {
+            document.body.style.overflow = 'unset'
+        }
+    }, [isOpen])
+
+    if (!isOpen || !mounted) return null;
+
+    return createPortal(
         <div className={styles.overlay} onClick={onClose}>
             <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
                 <header className={styles.header}>
@@ -21,6 +37,7 @@ export default function Modal({ isOpen, onClose, title, children }: ModalProps) 
                     {children}
                 </div>
             </div>
-        </div>
+        </div>,
+        document.body
     )
 }

@@ -21,10 +21,11 @@
     width: 90%;
     max-width: 500px;
     max-height: 85vh;
-    overflow-y: auto;
+    max-height: 85vh;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
     animation: slideUp 0.3s ease-out;
-    -webkit-overflow-scrolling: touch;
+    display: flex;
+    flex-direction: column;
 }
 
 .header {
@@ -33,6 +34,7 @@
     align-items: center;
     padding: 1.5rem;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    flex-shrink: 0;
 }
 
 .title {
@@ -71,6 +73,27 @@
     padding: 1.5rem;
     color: #ddd;
     line-height: 1.6;
+    overflow-y: auto;
+    flex: 1;
+    /* Custom Scrollbar for Content */
+}
+
+/* Webkit Scrollbar Styling for Content */
+.content::-webkit-scrollbar {
+    width: 6px;
+}
+
+.content::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.content::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+}
+
+.content::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.4);
 }
 
 @keyframes fadeIn {

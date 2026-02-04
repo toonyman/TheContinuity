@@ -31,10 +31,7 @@ export default function GuideModal({ isOpen, onClose, lang }: GuideModalProps) {
                     <p style={{ margin: 0 }}>{g.step3Desc}</p>
                 </div>
 
-                <div style={{ background: 'rgba(255,255,255,0.05)', padding: '1rem', borderRadius: '8px' }}>
-                    <h3 style={{ marginTop: 0, color: '#f1c40f' }}>{g.step4Title}</h3>
-                    <p style={{ margin: 0 }}>{g.step4Desc}</p>
-                </div>
+
 
                 <button
                     onClick={onClose}

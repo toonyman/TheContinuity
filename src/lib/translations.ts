@@ -16,8 +16,6 @@ export const TRANSLATIONS: Record<string, any> = {
             step2Desc: "Use the language selector at the top-right to read in your preferred language.",
             step3Title: "3. Write",
             step3Desc: "Add the next sentence to the story. Keep it under 100 characters. You can write in your native language!",
-            step4Title: "4. Cooldown",
-            step4Desc: "To give everyone a chance, you must wait 5 minutes between contributions.",
             button: "Start Writing"
         },
         about: {
@@ -66,8 +64,6 @@ export const TRANSLATIONS: Record<string, any> = {
             step2Desc: "우측 상단의 언어 선택 기능을 통해 원하는 언어로 소설을 읽을 수 있습니다.",
             step3Title: "3. 쓰기",
             step3Desc: "다음 문장을 이어 써주세요. 100자 이내로, 모국어로 자유롭게 작성하시면 됩니다.",
-            step4Title: "4. 쿨타임",
-            step4Desc: "많은 사람들의 참여를 위해, 글을 쓴 후에는 5분의 대기 시간이 있습니다.",
             button: "글쓰기 시작"
         },
         about: {
@@ -116,8 +112,6 @@ export const TRANSLATIONS: Record<string, any> = {
             step2Desc: "右上の言語選択メニューから、お好みの言語で読むことができます。",
             step3Title: "3. 書く",
             step3Desc: "物語の続きを書いてください。100文字以内で、母国語で自由に書くことができます。",
-            step4Title: "4. クールタイム",
-            step4Desc: "多くの人が参加できるよう、投稿後は5分間の待機時間があります。",
             button: "書き始める"
         },
         about: {
@@ -166,8 +160,6 @@ export const TRANSLATIONS: Record<string, any> = {
             step2Desc: "使用右上角的语言选择器，以您喜欢的语言阅读。",
             step3Title: "3. 写作",
             step3Desc: "续写下一句话。限制在100字以内。您可以用母语自由创作！",
-            step4Title: "4. 冷却时间",
-            step4Desc: "为了给每个人参与的机会，投稿后需要等待5分钟。",
             button: "开始写作"
         },
         about: {

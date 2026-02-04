@@ -76,6 +76,7 @@
     /* Soft Paper Texture Background */
     background-color: #151515;
     overscroll-behavior: contain;
+    touch-action: pan-y;
 }
 
 .contentScroll::-webkit-scrollbar {

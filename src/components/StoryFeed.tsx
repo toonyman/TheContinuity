@@ -113,36 +113,73 @@ export default function StoryFeed({ refreshTrigger, targetLang }: StoryFeedProps
         bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
     }, [stories, translatedStories])
 
+    const [userVotes, setUserVotes] = useState<Record<string, 'like' | 'dislike'>>({})
+
+    useEffect(() => {
+        // Hydrate votes from localStorage
+        const votes: Record<string, 'like' | 'dislike'> = {}
+        if (stories.length > 0) {
+            stories.forEach(story => {
+                const vote = localStorage.getItem(`vote_${story.id}`) as 'like' | 'dislike' | null
+                if (vote) {
+                    votes[story.id] = vote
+                }
+            })
+            setUserVotes(votes)
+        }
+    }, [stories])
+
     async function handleReaction(storyId: string, type: 'like' | 'dislike') {
         const story = stories.find(s => s.id === storyId)
         if (!story) return
 
-        // Ideally we should track user votes to prevent duplicate voting (using localStorage for simplicity)
-        const voteKey = `vote_${storyId}`
-        const currentVote = localStorage.getItem(voteKey)
+        const currentVote = userVotes[storyId]
+        let newLikes = story.likes || 0
+        let newDislikes = story.dislikes || 0
 
+        // Determine new state and update counts
         if (currentVote === type) {
-            return
+            // Toggle off
+            if (type === 'like') newLikes--
+            else newDislikes--
+
+            localStorage.removeItem(`vote_${storyId}`)
+            const newVotes = { ...userVotes }
+            delete newVotes[storyId]
+            setUserVotes(newVotes)
+        } else {
+            // New vote or switch vote
+            if (currentVote) {
+                // Remove previous vote count
+                if (currentVote === 'like') newLikes--
+                else newDislikes--
+            }
+
+            // Add new vote count
+            if (type === 'like') newLikes++
+            else newDislikes++
+
+            localStorage.setItem(`vote_${storyId}`, type)
+            setUserVotes(prev => ({ ...prev, [storyId]: type }))
         }
 
-        // Optimistic update
+        // Optimistic UI Update
         setStories(prev => prev.map(s => {
             if (s.id === storyId) {
                 return {
                     ...s,
-                    likes: type === 'like' ? (s.likes || 0) + 1 : (s.likes || 0),
-                    dislikes: type === 'dislike' ? (s.dislikes || 0) + 1 : (s.dislikes || 0)
+                    likes: newLikes,
+                    dislikes: newDislikes
                 }
             }
             return s
         }))
 
-        localStorage.setItem(voteKey, type)
-
         const { error } = await supabase
             .from('stories')
             .update({
-                [type === 'like' ? 'likes' : 'dislikes']: (type === 'like' ? (story.likes || 0) : (story.dislikes || 0)) + 1
+                likes: newLikes,
+                dislikes: newDislikes
             })
             .eq('id', storyId)
 
@@ -167,7 +204,7 @@ export default function StoryFeed({ refreshTrigger, targetLang }: StoryFeedProps
                             <div className={styles.reactionContainer}>
                                 <button
                                     onClick={() => handleReaction(story.id, 'like')}
-                                    className={styles.reactionBtn}
+                                    className={`${styles.reactionBtn} ${userVotes[story.id] === 'like' ? styles.active : ''}`}
                                     title="Like"
                                 >
                                     <span>👍</span>
@@ -175,7 +212,7 @@ export default function StoryFeed({ refreshTrigger, targetLang }: StoryFeedProps
                                 </button>
                                 <button
                                     onClick={() => handleReaction(story.id, 'dislike')}
-                                    className={styles.reactionBtn}
+                                    className={`${styles.reactionBtn} ${userVotes[story.id] === 'dislike' ? styles.active : ''}`}
                                     title="Dislike"
                                 >
                                     <span>👎</span>

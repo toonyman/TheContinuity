@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from 'next'
 import { GoogleAnalytics } from '@next/third-parties/google'
 import './globals.css'
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://thecontinuity.app'
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://the-continuity.vercel.app'
 const siteName = 'The Continuity'
 const siteDescription = 'A Global Collaborative Novel - Join thousands of writers worldwide in creating an ever-evolving story. Write the next sentence and become part of literary history.'
 

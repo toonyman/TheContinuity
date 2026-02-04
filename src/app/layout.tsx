@@ -1,3 +1,4 @@
+import Script from 'next/script'
 import type { Metadata, Viewport } from 'next'
 import { GoogleAnalytics } from '@next/third-parties/google'
 import './globals.css'
@@ -89,6 +90,9 @@ export const metadata: Metadata = {
     verification: {
         google: 'OAv4N25-_EylIfm5Jo5lZ5ldSv2O8fp0g8ipHl3tulQ',
     },
+    other: {
+        'google-adsense-account': 'ca-pub-7644009675634803',
+    },
 }
 
 export default function RootLayout({
@@ -124,7 +128,15 @@ export default function RootLayout({
                     dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
                 />
             </head>
-            <body>{children}</body>
+            <body>
+                {children}
+                <Script
+                    async
+                    src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7644009675634803"
+                    crossOrigin="anonymous"
+                    strategy="afterInteractive"
+                />
+            </body>
             <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID || ''} />
         </html>
     )

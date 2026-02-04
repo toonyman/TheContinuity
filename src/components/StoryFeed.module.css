@@ -9,12 +9,50 @@
     top: 0;
     display: flex;
     justify-content: flex-end;
-    padding: 1rem;
+    padding: 0 1rem;
     z-index: 5;
-    background: #000000;
+    /* Removed background so it floats nicely over content or use a gradient */
+    pointer-events: none;
+    /* Let clicks pass through empty areas */
+    margin-bottom: -40px;
+    /* Pull feed up so it overlaps/sits nicely */
+    transform: translateY(10px);
 }
 
+.controls>* {
+    pointer-events: auto;
+}
+
+.readerBtn {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--primary);
+    border: 1px solid var(--border);
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    justify-content: center;
+    border-radius: 50%;
+    backdrop-filter: blur(10px);
+    font-family: var(--font-sans);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.readerBtn:hover {
+    background: var(--primary);
+    color: #000;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(212, 175, 55, 0.3);
+}
+
+
+
 .langSelect {
+    /* Legacy style, kept just in case but likely unused now */
     background: rgba(255, 255, 255, 0.1);
     color: var(--foreground);
     border: 1px solid var(--border);

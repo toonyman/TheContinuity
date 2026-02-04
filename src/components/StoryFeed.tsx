@@ -5,6 +5,7 @@ import { supabase } from '@/lib/supabase'
 import { Story } from '@/types'
 import styles from './StoryFeed.module.css'
 import { translateText } from '@/lib/translate'
+import ReaderModal from './ReaderModal'
 
 interface StoryFeedProps {
     refreshTrigger: number;
@@ -17,6 +18,7 @@ export default function StoryFeed({ refreshTrigger, targetLang }: StoryFeedProps
     const [translatedStories, setTranslatedStories] = useState<Record<string, string>>({})
     // Track translated stories to safely check status without adding state dependency
     const translatedIds = useRef<Set<string>>(new Set())
+    const [isReaderOpen, setIsReaderOpen] = useState(false)
 
     const fetchStories = async () => {
         const { data, error } = await supabase
@@ -190,6 +192,22 @@ export default function StoryFeed({ refreshTrigger, targetLang }: StoryFeedProps
 
     return (
         <div className={styles.feedWrapper}>
+            <div className={styles.controls}>
+                <button
+                    className={styles.readerBtn}
+                    onClick={() => setIsReaderOpen(true)}
+                    title="Reader View"
+                >
+                    <span style={{ fontSize: '1.2rem' }}>📖</span>
+                </button>
+            </div>
+
+            <ReaderModal
+                isOpen={isReaderOpen}
+                onClose={() => setIsReaderOpen(false)}
+                content={stories.map(s => translatedStories[s.id] || s.content).join('\n\n')}
+            />
+
             <div className={styles.feed}>
                 {stories.length === 0 ? (
                     <div className={styles.emptyState}>

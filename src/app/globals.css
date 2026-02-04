@@ -20,6 +20,10 @@
   --spacing-xl: 4rem;
 }
 
+* {
+  box-sizing: border-box;
+}
+
 html,
 body {
   max-width: 100vw;

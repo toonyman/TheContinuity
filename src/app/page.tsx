@@ -10,6 +10,16 @@ import { LANGUAGES } from '@/lib/translate'
 import { TRANSLATIONS } from '@/lib/translations'
 import OnlineCount from '@/components/OnlineCount'
 
+const LANG_FLAGS: Record<string, string> = {
+    'en': '🇺🇸',
+    'ko': '🇰🇷',
+    'ja': '🇯🇵',
+    'zh-CN': '🇨🇳',
+    'es': '🇪🇸',
+    'fr': '🇫🇷',
+    'de': '🇩🇪',
+}
+
 export default function Home() {
     const [refreshTrigger, setRefreshTrigger] = useState(0)
     const [targetLang, setTargetLang] = useState('en')
@@ -38,6 +48,18 @@ export default function Home() {
                     <p className={styles.subtitle}>{t.subtitle}</p>
                 </div>
                 <div className={styles.headerControls}>
+                    <div className={styles.flagContainer}>
+                        {LANGUAGES.map(lang => (
+                            <button
+                                key={lang.code}
+                                className={`${styles.flagBtn} ${targetLang === lang.code ? styles.active : ''}`}
+                                onClick={() => setTargetLang(lang.code)}
+                                title={lang.name}
+                            >
+                                {LANG_FLAGS[lang.code] || '🌐'}
+                            </button>
+                        ))}
+                    </div>
                     <button
                         className={styles.hamburgerBtn}
                         onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -52,21 +74,7 @@ export default function Home() {
                             <div className={styles.menuDrawer}>
                                 <button className={styles.closeMenuBtn} onClick={() => setIsMenuOpen(false)} aria-label="Close menu">&times;</button>
                                 <div className={styles.menuContent}>
-                                    <div className={styles.menuItem}>
-                                        <label>Language</label>
-                                        <select
-                                            value={targetLang}
-                                            onChange={(e) => {
-                                                setTargetLang(e.target.value)
-                                                setIsMenuOpen(false)
-                                            }}
-                                            className={styles.langSelect}
-                                        >
-                                            {LANGUAGES.map(lang => (
-                                                <option key={lang.code} value={lang.code} className={styles.langOption}>{lang.name}</option>
-                                            ))}
-                                        </select>
-                                    </div>
+                                    {/* Language Selector Removed */}
 
                                     <button
                                         onClick={() => {

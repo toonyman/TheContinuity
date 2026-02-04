@@ -8,7 +8,9 @@ create table public.stories (
   parent_id uuid references public.stories(id), -- Tree structure
   author_geo text,
   created_at timestamp with time zone default timezone('utc'::text, now()) not null,
-  is_hidden boolean default false -- For self-moderation (Veto system)
+  is_hidden boolean default false, -- For self-moderation (Veto system)
+  likes integer default 0,
+  dislikes integer default 0
 );
 
 -- Enable Row Level Security (RLS)
@@ -27,12 +29,18 @@ create policy "Allow public insert access"
   for insert
   with check (true);
 
+-- Create a policy that allows anyone (anon) to update stories (for likes/dislikes)
+create policy "Allow public update access"
+  on public.stories
+  for update
+  using (true)
+  with check (true);
+
 -- Create an index on parent_id to optimize tree traversal
 create index stories_parent_id_idx on public.stories(parent_id);
 
 -- Create an index on created_at for sorting
 create index stories_created_at_idx on public.stories(created_at);
-
 
 -- [관리용] 데이터 전체 삭제 (초기화)
 -- Supabase 대시보드 SQL Editor에서 아래 명령어를 실행하세요.

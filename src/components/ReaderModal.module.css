@@ -76,6 +76,23 @@
     background-color: #151515;
 }
 
+.contentScroll::-webkit-scrollbar {
+    width: 6px;
+}
+
+.contentScroll::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.contentScroll::-webkit-scrollbar-thumb {
+    background: #333;
+    border-radius: 10px;
+}
+
+.contentScroll::-webkit-scrollbar-thumb:hover {
+    background: #444;
+}
+
 .paper {
     width: 100%;
     max-width: 100%;

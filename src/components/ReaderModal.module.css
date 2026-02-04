@@ -98,33 +98,66 @@
     max-width: 100%;
     margin: 0 auto;
     padding: 2rem;
+    padding-top: 1rem;
+    /* Reduced top padding since button floats */
     box-sizing: border-box;
     position: relative;
     /* Add a subtle paper effect if desired, strictly dark mode for now */
 }
 
 .copyContainer {
+    position: sticky;
+    top: 0;
     display: flex;
     justify-content: flex-end;
-    margin-bottom: 1rem;
+    margin-bottom: 0;
+    pointer-events: none;
+    /* Let text be selectable underneath if overlapping transparently */
+    z-index: 10;
+    height: 0;
+    /* Don't take up layout space, just float there */
+    overflow: visible;
 }
 
 .copyBtn {
-    background: transparent;
+    background: rgba(0, 0, 0, 0.6);
     border: 1px solid var(--border);
     color: var(--primary);
-    padding: 0.4rem 0.8rem;
-    font-size: 0.8rem;
-    border-radius: 4px;
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
     cursor: pointer;
-    font-family: var(--font-sans);
     transition: all 0.2s;
-    opacity: 0.8;
+    backdrop-filter: blur(4px);
+    pointer-events: auto;
+    margin-top: 0.5rem;
+    /* Little offset from top */
+}
+
+.copyBtn svg {
+    width: 18px;
+    height: 18px;
+    fill: currentColor;
 }
 
 .copyBtn:hover {
-    background: rgba(212, 175, 55, 0.1);
-    opacity: 1;
+    background: var(--primary);
+    color: #000;
+    transform: scale(1.1);
+}
+
+.copyBtn.copied {
+    border-color: #4cd964;
+    color: #4cd964;
+}
+
+.copyBtn.copied:hover {
+    background: #4cd964;
+    color: #000;
 }
 
 .text {

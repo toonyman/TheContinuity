@@ -42,8 +42,16 @@ export default function ReaderModal({ isOpen, onClose, content }: ReaderModalPro
                 <div className={styles.contentScroll}>
                     <div className={styles.paper}>
                         <div className={styles.copyContainer}>
-                            <button className={styles.copyBtn} onClick={handleCopy}>
-                                {copied ? 'Copied!' : 'Copy All'}
+                            <button
+                                className={`${styles.copyBtn} ${copied ? styles.copied : ''}`}
+                                onClick={handleCopy}
+                                title={copied ? 'Copied!' : 'Copy All'}
+                            >
+                                {copied ? (
+                                    <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" /></svg>
+                                ) : (
+                                    <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z" /></svg>
+                                )}
                             </button>
                         </div>
                         <p className={styles.text}>

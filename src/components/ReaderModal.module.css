@@ -99,7 +99,32 @@
     margin: 0 auto;
     padding: 2rem;
     box-sizing: border-box;
+    position: relative;
     /* Add a subtle paper effect if desired, strictly dark mode for now */
+}
+
+.copyContainer {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 1rem;
+}
+
+.copyBtn {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--primary);
+    padding: 0.4rem 0.8rem;
+    font-size: 0.8rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: var(--font-sans);
+    transition: all 0.2s;
+    opacity: 0.8;
+}
+
+.copyBtn:hover {
+    background: rgba(212, 175, 55, 0.1);
+    opacity: 1;
 }
 
 .text {

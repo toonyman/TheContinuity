@@ -11,6 +11,7 @@ interface ReaderModalProps {
 
 export default function ReaderModal({ isOpen, onClose, content }: ReaderModalProps) {
     const [isVisible, setIsVisible] = useState(false)
+    const [copied, setCopied] = useState(false)
 
     useEffect(() => {
         if (isOpen) {
@@ -23,6 +24,12 @@ export default function ReaderModal({ isOpen, onClose, content }: ReaderModalPro
         }
     }, [isOpen])
 
+    const handleCopy = () => {
+        navigator.clipboard.writeText(content)
+        setCopied(true)
+        setTimeout(() => setCopied(false), 2000)
+    }
+
     if (!isVisible && !isOpen) return null
 
     return (
@@ -34,6 +41,11 @@ export default function ReaderModal({ isOpen, onClose, content }: ReaderModalPro
                 </div>
                 <div className={styles.contentScroll}>
                     <div className={styles.paper}>
+                        <div className={styles.copyContainer}>
+                            <button className={styles.copyBtn} onClick={handleCopy}>
+                                {copied ? 'Copied!' : 'Copy All'}
+                            </button>
+                        </div>
                         <p className={styles.text}>
                             {content}
                         </p>
